@@ -1,0 +1,81 @@
+Void HX8357-A_CPT_024GP21_initial_code(void)
+{
+// SUB_SEL for HX8357-A in use MDDI I/F
+//Add the two setting below while using MDDI I/F
+Set_LCD_8B_REG(0xFF,0x00); // Command page 0
+Set_LCD_8B_REG(0x72,0xF6); // SUB_SEL=0xF6
+// Power saving for HX8357-A
+Set_LCD_8B_REG(0xFF,0x00); // Command page 0
+Set_LCD_8B_REG(0xF2,0x00); // GENON=0x00
+Set_LCD_8B_REG(0xE4,0x00); // EQVCI_M1=0x00
+Set_LCD_8B_REG(0xE5,0x1C); // EQGND_M1=0x1C
+Set_LCD_8B_REG(0xE6,0x00); // EQVCI_M0=0x1C
+Set_LCD_8B_REG(0xE7,0x1C); // EQGND_M0=0x1C
+Set_LCD_8B_REG(0xEE,0x42); // For GRAM read/write speed
+Set_LCD_8B_REG(0xEF,0xDB); // For GRAM read/write speed
+Set_LCD_8B_REG(0x2E,0x98); //For Gate timing, prevent the display abnormal in RGB I/F
+// Gamma
+Set_LCD_8B_REG(0x40,0x00);
+Set_LCD_8B_REG(0x41,0x2E);
+Set_LCD_8B_REG(0x42,0x2D);
+Set_LCD_8B_REG(0x43,0x3F);
+Set_LCD_8B_REG(0x44,0x3F);
+Set_LCD_8B_REG(0x45,0x3F);
+Set_LCD_8B_REG(0x46,0x2C);
+Set_LCD_8B_REG(0x47,0x7F);
+Set_LCD_8B_REG(0x48,0x07);
+Set_LCD_8B_REG(0x49,0x05);
+Set_LCD_8B_REG(0x4A,0x08);
+Set_LCD_8B_REG(0x4B,0x13);
+Set_LCD_8B_REG(0x4C,0x1E);
+Set_LCD_8B_REG(0x50,0x00);
+Set_LCD_8B_REG(0x51,0x00);
+Set_LCD_8B_REG(0x52,0x00);
+Set_LCD_8B_REG(0x24,0x22); // Set VCOMH voltage, VHH=0x64
+Set_LCD_8B_REG(0x25,0x64); // Set VCOML voltage, VML=0x71
+Set_LCD_8B_REG(0x23,0x90); // Set VCOM offset, VMF=0x52
+Set_LCD_8B_REG(0x1B,0x0E); // Set VERG1 voltage, VRH[5:0]=0x1E
+Set_LCD_8B_REG(0x1D,0x11); // FS0[1:0]=01, Set the operating frequency of the step-up circuit 1
+// Power on Setting
+Set_LCD_8B_REG(0x19,0x01); // OSC_EN=1, Start to Oscillate
+Set_LCD_8B_REG(0x1C,0x03); // AP=011
+Set_LCD_8B_REG(0x01,0x00); // Normal display(Exit Deep standby mode)
+Set_LCD_8B_REG(0x1F,0x80); // Exit standby mode and Step-up circuit 1 enable
+// GAS_EN=1, VCOMG=0, PON=0, DK=0, XDK=0, DDVDH_TRI=0, STB=0
+DelayX1ms(5);
+Set_LCD_8B_REG(0x1F,0x90); // Step-up circuit 2 enable
+// GAS_EN=1, VCOMG=0, PON=1, DK=0, XDK=0, DDVDH_TRI=0, STB=0
+DelayX1ms(5);
+Set_LCD_8B_REG(0x1F,0xD4);
+// GAS_EN=1, VCOMG=1, PON=1, DK=0, XDK=1, DDVDH_TRI=0, STB=0
+DelayX1ms(5);
+// Display ON Setting
+Set_LCD_8B_REG(0x28,0x08); // GON=0, DTE=0, D[1:0]=01
+DelayX1ms(40);
+Set_LCD_8B_REG(0x28,0x38); // GON=1, DTE=1, D[1:0]=10
+DelayX1ms(40);
+Set_LCD_8B_REG(0x28,0x3C); // GON=1, DTE=1, D[1:0]=11
+Set_LCD_8B_REG(0x17,0x06); // 18-bit/pixel
+HX8357-A_Update_GRAM();
+}
+Set_LCD_8B_REG(0x53,0x12);
+Set_LCD_8B_REG(0x54,0x11);
+Set_LCD_8B_REG(0x55,0x3F);
+Set_LCD_8B_REG(0x56,0x00);
+Set_LCD_8B_REG(0x57,0x53);
+Set_LCD_8B_REG(0x58,0x01);
+Set_LCD_8B_REG(0x59,0x0C);
+Set_LCD_8B_REG(0x5A,0x17);
+Set_LCD_8B_REG(0x5B,0x1A);
+Set_LCD_8B_REG(0x5C,0x18);
+Set_LCD_8B_REG(0x5D,0xC3);
+// Set GRAM area 320x240
+Set_LCD_8B_REG(0x02,0x00);
+Set_LCD_8B_REG(0x03,0x00);
+Set_LCD_8B_REG(0x04,0x01);
+Set_LCD_8B_REG(0x05,0x3F);
+Set_LCD_8B_REG(0x06,0x00);
+Set_LCD_8B_REG(0x07,0x00);
+Set_LCD_8B_REG(0x08,0x00);
+Set_LCD_8B_REG(0x09,0xEF);
+// Power Setting

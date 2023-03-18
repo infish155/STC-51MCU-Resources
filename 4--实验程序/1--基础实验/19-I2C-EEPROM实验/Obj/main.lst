@@ -1,0 +1,83 @@
+C51 COMPILER V9.01   MAIN                                                                  11/27/2021 14:11:25 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Obj\main.obj
+COMPILER INVOKED BY: D:\YZ\KEILC51\C51\BIN\C51.EXE User\main.c BROWSE INCDIR(.\App\24c02;.\App\iic;.\App\key;.\App\smg;.
+                    -\Public) DEBUG OBJECTEXTEND PRINT(.\Obj\main.lst) OBJECT(.\Obj\main.obj)
+
+line level    source
+
+   1          /**************************************************************************************
+   2          深圳市普中科技有限公司（PRECHIN 普中）
+   3          技术支持：www.prechin.net
+   4          
+   5          实验名称：I2C-EEPROM实验
+   6          接线说明：      
+   7          实验现象：下载程序后，数码管右4位显示0，按K1键将数据写入到EEPROM内保存，
+   8                            按K2键读取EEPROM内保存的数据，按K3键显示数据加1，按K4键显示数据清零，
+   9                            最大能写入的数据是255。
+  10          注意事项：                                                                                                                                                                
+  11          ***************************************************************************************/
+  12          #include "public.h"
+  13          #include "24c02.h"
+  14          #include "key.h"
+  15          #include "smg.h"
+  16          
+  17          
+  18          #define EEPROM_ADDRESS  0       //定义数据存入EEPROM的起始地址
+  19          
+  20          /*******************************************************************************
+  21          * 函 数 名       : main
+  22          * 函数功能               : 主函数
+  23          * 输    入       : 无
+  24          * 输    出       : 无
+  25          *******************************************************************************/
+  26          void main()
+  27          {       
+  28   1              u8 key_temp=0;
+  29   1              u8 save_value=0;
+  30   1              u8 save_buf[3];
+  31   1      
+  32   1              while(1)
+  33   1              {                       
+  34   2                      key_temp=key_scan(0);
+  35   2                      if(key_temp==KEY1_PRESS)
+  36   2                      {
+  37   3                              at24c02_write_one_byte(EEPROM_ADDRESS,save_value);
+  38   3                      }
+  39   2                      else if(key_temp==KEY2_PRESS)
+  40   2                      {
+  41   3                              save_value=at24c02_read_one_byte(EEPROM_ADDRESS);
+  42   3                      }
+  43   2                      else if(key_temp==KEY3_PRESS)
+  44   2                      {
+  45   3                              save_value++;
+  46   3                              if(save_value==255)save_value=255;
+  47   3                      }
+  48   2                      else if(key_temp==KEY4_PRESS)
+  49   2                      {
+  50   3                              save_value=0;   
+  51   3                      }
+  52   2                      save_buf[0]=save_value/100;
+  53   2                      save_buf[1]=save_value%100/10;
+  54   2                      save_buf[2]=save_value%100%10;
+C51 COMPILER V9.01   MAIN                                                                  11/27/2021 14:11:25 PAGE 2   
+
+  55   2                      smg_display(save_buf,6);
+  56   2              }               
+  57   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    109    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
